@@ -215,6 +215,6 @@ transect_dict_2 = sample_transect(endpoints_2, sefunc_2012, sefunc_2015, cauldro
 transect_dict_3 = sample_transect(endpoints_3, sefunc_2012, sefunc_2015, cauldron_name='Transect 3')
 
 
-#f1 = plot_VE_transect(transect_dict_1)
-#f2 = plot_VE_transect(transect_dict_2)
-#f3 = plot_VE_transect(transect_dict_3)
+#f1 = plot_VE_transect(transect_dict_1, colormap=cm.get_cmap('viridis'))
+#f2 = plot_VE_transect(transect_dict_2, colormap=cm.get_cmap('viridis'))
+#f3 = plot_VE_transect(transect_dict_3, colormap=cm.get_cmap('viridis'))
