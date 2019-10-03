@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.patches import Rectangle
 import math
+import sys
+sys.path.insert(0, 'Documents/GitHub/VE-cauldrons')
 from cauldron_funcs import *
 
 
