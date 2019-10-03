@@ -58,7 +58,7 @@ def haversine(coord1, coord2):
 #transect_length = haversine(endpoints[0][::-1], endpoints[1][::-1])
 #xaxis = np.linspace(0, transect_length, num=npoints)
 
-def sample_transect(endpts, DEM_surface1, DEM_surface2=None, cauldron_name='Eastern_Skafta', npoints=1000, elastic=True, viscoelastic=True, days_simulated = 5, stresses=False):
+def sample_transect(endpts, DEM_surface1, DEM_surface2=None, cauldron_name='Eastern_Skafta', npoints=1000, elastic=True, viscoelastic=True, days_simulated = 5, timestep=20000, stresses=False):
     """ Function to standardize transecting procedure.  Sets up a cauldron with appropriate radius and computes analytical profiles.
     Arguments:
         endpts = (lat, lon) of the two endpoints of the transect
@@ -97,7 +97,7 @@ def sample_transect(endpts, DEM_surface1, DEM_surface2=None, cauldron_name='East
         out_dict['elastic_profile'] = [cldrn.LL_profile(x) for x in x_cylcoords]
     if viscoelastic:
         nseconds = days_simulated*24*60*60 #number of seconds in days_simulated
-        times = np.arange(0, nseconds, step=20000)
+        times = np.arange(0, nseconds, step=timestep)
         out_dict['VE_times'] = times
         out_dict['VE_profiles'] = [[cldrn.viscoelastic_profile(x, t0) for x in x_cylcoords] for t0 in times]
     if stresses:
@@ -160,7 +160,7 @@ def plot_VE_transect(in_dict, colormap=cm.get_cmap('winter_r'), make_legend=Fals
         sevals_2 = sevals_1
     try:
         ve_profile_series = in_dict['VE_profiles']
-        times = in_dict['VE_times']
+        times = in_dict['VE_times'][::10] 
     except KeyError:
         print 'No viscoelastic profiles saved. Unable to proceed.'
         return #exit the function
@@ -168,7 +168,7 @@ def plot_VE_transect(in_dict, colormap=cm.get_cmap('winter_r'), make_legend=Fals
         elastic_profile = in_dict['elastic_profile']
     except KeyError:
         elastic_profile = ve_profile_series[0] #use first VE profile, from time t=0, as stand-in for pure elastic
-
+    
     colors = colormap(np.linspace(0.1, 0.9, num=len(times)+1))
     
     fig = plt.figure('Viscoelastic progression, {}'.format(in_dict['name']), figsize=(7, 3))
@@ -176,7 +176,7 @@ def plot_VE_transect(in_dict, colormap=cm.get_cmap('winter_r'), make_legend=Fals
     plt.plot(xaxis, sevals_2, color='k', ls='-', label='Obs.') #, label='10 Oct 2015'
     #plt.plot(xaxis, elas_profile_array, color='r', ls=':', label='Elastic beam')
     plt.plot(xaxis, elastic_profile, color=colors[0], lw=2, label='Elastic plate')
-    for i,ti in enumerate(times[::10]):
+    for i,ti in enumerate(times):
         labeltime = int(round(ti/86400)) #time in days
         plt.plot(xaxis, ve_profile_series[i][:], ls='--', color=colors[i+1], lw=2, label='Viscoelastic, t = {} days'.format(labeltime))
     plt.fill_between(xaxis, sevals_1, sevals_2, color='Gainsboro', hatch='/', edgecolor='DimGray', linewidth=0, alpha=0.7)
