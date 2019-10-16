@@ -11,15 +11,15 @@ from scipy.interpolate import interp2d,griddata,SmoothBivariateSpline
 datadic = {}
 ### inputs
 ### commented versions are the full DEM as given by ArcticDEM
-# datadic['hdr'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem.hdr'
-# datadic['dem'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_medflt.bin'
-# datadic['mask'] = '../SETSM_WV02_20151010_dem_highpass_mask_smooth.bin'
+# datadic['hdr'] = '../diff/skaftar_east/SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem.hdr'
+# datadic['dem'] = '../diff/skaftar_east/SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_medflt.bin'
+# datadic['mask'] = '../diff/skaftar_east/SETSM_WV02_20151010_dem_highpass_mask_smooth.bin'
 datadic['hdr'] = '../diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.hdr'
 datadic['dem'] = '../diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.bin'
 datadic['hdr2'] = '../diff/skaftar_east/SETSM_WV02_20121015_skaftar_east_medflt.hdr'
 datadic['dem2'] = '../diff/skaftar_east/SETSM_WV02_20121015_skaftar_east_medflt.bin'
 datadic['mask'] = '../diff/skaftar_east/SETSM_WV02_20151010_skafar_east_dem_highpass_mask_smooth.bin'
-### outputs
+# ### outputs
 datadic['output_dem'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled.bin'
 datadic['output_diff'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
 datadic['output_slope'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
@@ -38,7 +38,7 @@ datadic['output_skafta_xyz'] = 'SETSM_WV02_20151010_nocrevasse_skafta.xyz'
 # datadic['output_slope2'] = '../SETSM_WV02_20121015_103001001BA10100_103001001D24CE00_seg1_2m_v2.0_dem_filled_slope.bin'
 # datadic['output_laplacian'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_laplacian.bin'
 # datadic['output_curvature'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_curvature.bin'
-
+# 
 def main(datafiles):
     skafta = {}
     skafta['ul_polstr'] = [1294500.,-2489500.]
@@ -58,15 +58,19 @@ def main(datafiles):
     data.mask_logic *= null_mask
 
     ### get row and column for Skafta
-    ul_row = np.int(np.abs(data.hdr['ulx'] - skafta['ul_polstr'][0]) / data.hdr['spx'])
-    ul_col = np.int(np.abs(data.hdr['uly'] - skafta['ul_polstr'][1]) / data.hdr['spy'])
-    lr_row = np.int(np.abs(data.hdr['ulx'] - skafta['lr_polstr'][0]) / data.hdr['spx'])
-    lr_col = np.int(np.abs(data.hdr['uly'] - skafta['lr_polstr'][1]) / data.hdr['spy'])
+    #ul_row = np.int(np.abs(data.hdr['ulx'] - skafta['ul_polstr'][0]) / data.hdr['spx'])
+    #ul_col = np.int(np.abs(data.hdr['uly'] - skafta['ul_polstr'][1]) / data.hdr['spy'])
+    #lr_row = np.int(np.abs(data.hdr['ulx'] - skafta['lr_polstr'][0]) / data.hdr['spx'])
+    #lr_col = np.int(np.abs(data.hdr['uly'] - skafta['lr_polstr'][1]) / data.hdr['spy'])
+    ul_row = 948
+    ul_col=2791
+    lr_row = 2851
+    lr_col = 5126
 
     ### cut out Skafta
     data.dem_skafta = data.dem[ul_row:lr_row,ul_col:lr_col]
     data.mask_logic_skafta = data.mask_logic[ul_row:lr_row,ul_col:lr_col]
-    skafta_shape = data.dem_skafta.shape
+    #skafta_shape = data.dem_skafta.shape
 
     data.skafta_gridx = np.empty_like(data.dem_skafta)
     data.skafta_gridy = np.empty_like(data.dem_skafta)
@@ -158,6 +162,7 @@ class Data():
     def __init__(data,datafiles):
         data.files = datafiles
         data.hdr = data.get_header('hdr')
+        print(data.files.keys())
         data.hdr_prior = data.get_header('hdr2')
 
     def read_data(data):
@@ -176,7 +181,7 @@ class Data():
                 raise ValueError('dem not the right size according to header')
 
 
-    def get_header(data,hdrstr='hdr'):
+    def get_header(data,hdrstr):
         hdr = {}
         with open(data.files[hdrstr],'r') as fid:
             reads = fid.readlines()
