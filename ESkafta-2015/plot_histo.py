@@ -76,7 +76,7 @@ frac_weights = np.ones_like(frac_stress_sample)/float(len(frac_stress_sample))
 bins = np.linspace(-10, 10, num=40)
 
 plt.figure()
-plt.hist((intact_stress_sample, frac_stress_sample), bins=bins, weights=(intact_weights, frac_weights), label=('intact', 'fractured'))
+plt.hist((intact_stress_sample, frac_stress_sample), bins=bins, weights=(intact_weights, frac_weights), color=('LightBlue', 'Maroon'), label=('intact', 'fractured'))
 plt.legend(loc='best')
 plt.axes().set_xlabel('Surface elastic stress [MPa]', fontsize=18)
 plt.axes().set_ylabel('Density in sample', fontsize=18)
