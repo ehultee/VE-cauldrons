@@ -9,22 +9,22 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LightSource, Normalize
 #from cpt_tools import cpt2python
 
-#def main(datadic,skafta):
-#    data = Data(datadic,skafta)
-#    data.read_data()
-#    data.region_of_interest()
-#    data.calc_elastic_stress()
-#    data.dem[data.dem < 0] = np.nan
+def main(datadic,skafta):
+	data = Data(datadic,skafta)
+	data.read_data()
+	data.region_of_interest(ul_row=948, ul_col=2791, lr_row=2851, lr_col=5126)
+	data.calc_elastic_stress()
+	data.dem[data.dem < 0] = np.nan
+
+   # Create a light source
+	ls = LightSource(azdeg=315, altdeg=45)
 #
-#    # Create a light source
-#    ls = LightSource(azdeg=315, altdeg=45)
-#
-#    #plot_dem_only(data,ls)
-#    plot_filled_dem(data,ls)
+   #plot_dem_only(data,ls)
+# 	plot_filled_dem(data,ls)
     # plot_slope(data,ls)
     # plot_curvature(data,ls)
     # plot_strain(data,ls)
-    # plot_elastic_stress(data,ls)
+	plot_elastic_stress(data,ls)
 #     plot_strain_energy_density(data,ls)
 
 # def plot_strain_energy_density(data,ls):
@@ -62,10 +62,10 @@ def plot_elastic_stress(data,ls):
 
     ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
     cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
-    cf0 = ax.contourf(1.e-6*data.filled_stress,cmap=cmap,extend='both',levels=np.linspace(-30,30,30),alpha=0.8)
-    cbar = fig.colorbar(cf0,ax=ax,ticks=[-30,-15,0,15,30])
+    cf0 = ax.contourf(1.e-6*data.filled_stress,cmap=cmap,extend='both',levels=np.linspace(-10,10,30),alpha=0.8)
+    cbar = fig.colorbar(cf0,ax=ax,ticks=[-10,-5,0,5,10])
     cbar.ax.set_ylabel('Elastic surface stresses [MPa]',fontsize=12)
-    cbar.ax.set_yticklabels(['-30','-15','0','15','30'])
+    cbar.ax.set_yticklabels(['-10','-5','0','5','10'])
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
 
@@ -74,7 +74,7 @@ def plot_elastic_stress(data,ls):
 
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/stress_shaded.pdf',bbox_inches='tight')
+    plt.savefig('figs/stress_shaded.png',bbox_inches='tight')
 
 def plot_strain(data,ls):
     # Choose colormap and data range normalization
@@ -283,17 +283,21 @@ class Data():
                 hdr['lry'] = hdr['uly'] - (hdr['rows']-1)*np.abs(hdr['spy'])
         return hdr
 
-#if __name__=='__main__':
-#    datadic = {}
-#    datadic['hdr'] = '../SETSM_WV02_20151010_skaftar_east_medflt.hdr'
-#    datadic['dem'] = '../SETSM_WV02_20151010_skaftar_east_medflt.bin'
-#    datadic['filled_dem'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled.bin'
-#    datadic['filled_diff'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
-#    datadic['filled_slope'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
-#    datadic['filled_curvature'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
-#
-#    skafta = {}
+if __name__=='__main__':
+	fpath = '/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/'
+	datadic = {}
+	### inputs - cropped DEMs
+	datadic['hdr'] = fpath+'diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.hdr'
+	datadic['dem'] = fpath+'diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.bin'
+	datadic['mask'] = fpath+'diff/skaftar_east/SETSM_WV02_20151010_skafar_east_dem_highpass_mask_smooth.bin'
+	### inputs - processed by smooth_crevasses.py
+	datadic['filled_dem'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled.bin'
+	datadic['filled_diff'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
+	datadic['filled_slope'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
+	datadic['filled_curvature'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
+
+	skafta = {}
 #    skafta['ul_polstr'] = [1294500.,-2489500.]
 #    skafta['lr_polstr'] = [1298500.,-2493500.]
 #
-#    main(datadic,skafta)
+main(datadic,skafta)
