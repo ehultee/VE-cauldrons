@@ -51,30 +51,33 @@ def main(datadic,skafta):
 #     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
 #     plt.savefig('figs/strain_energy_shaded.pdf',bbox_inches='tight')
 
-def plot_elastic_stress(data,ls):
+def plot_elastic_stress(data, ls, saturation_stress=10):
+	"""Plot maximum stress attainable in a purely elastic deformation.
+	Optional argument: 
+		saturation_stress: default 30 MPa, can be increased or decreased to highlight qualitative features"""
     # Choose colormap and data range normalization
-    cmap = plt.get_cmap('Spectral')
+	cmap = plt.get_cmap('Spectral')
+	
+	fig, ax = plt.subplots()
 
-    fig, ax = plt.subplots()
+	hatch = np.isnan(data.dem).astype(np.float32)
+	hatch[hatch < 0.5] = np.nan
 
-    hatch = np.isnan(data.dem).astype(np.float32)
-    hatch[hatch < 0.5] = np.nan
-
-    ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
-    cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
-    cf0 = ax.contourf(1.e-6*data.filled_stress,cmap=cmap,extend='both',levels=np.linspace(-10,10,30),alpha=0.8)
-    cbar = fig.colorbar(cf0,ax=ax,ticks=[-10,-5,0,5,10])
-    cbar.ax.set_ylabel('Elastic surface stresses [MPa]',fontsize=12)
-    cbar.ax.set_yticklabels(['-10','-5','0','5','10'])
+	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
+	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
+	cf0 = ax.contourf(1.e-6*data.filled_stress,cmap=cmap,extend='both',levels=np.linspace(-1*saturation_stress,saturation_stress,30),alpha=0.8)
+	cbar = fig.colorbar(cf0,ax=ax,ticks=[-1*saturation_stress,-0.5*saturation_stress,0,0.5*saturation_stress,saturation_stress])
+	cbar.ax.set_ylabel('Elastic surface stresses [MPa]',fontsize=12)
+#     cbar.ax.set_yticklabels([format(),format(),format(),format(),format()])
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
 
-    ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
-    ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
+	ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
+	ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
 
-    ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
-    ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/stress_shaded.png',bbox_inches='tight')
+	ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
+	ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
+	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/stress_shaded.pdf',bbox_inches='tight')
 
 def plot_strain(data,ls):
     # Choose colormap and data range normalization
@@ -100,7 +103,7 @@ def plot_strain(data,ls):
 
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/strain_shaded.pdf',bbox_inches='tight')
+    plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/strain_shaded.pdf',bbox_inches='tight')
 
 def plot_curvature(data,ls):
     # Choose colormap and data range normalization
@@ -127,7 +130,7 @@ def plot_curvature(data,ls):
 
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/curvature_shaded.pdf',bbox_inches='tight')
+    plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/curvature_shaded.pdf',bbox_inches='tight')
 
 def plot_slope(data,ls):
     # Choose colormap and data range normalization
@@ -153,7 +156,7 @@ def plot_slope(data,ls):
 
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/slope_shaded.pdf',bbox_inches='tight')
+    plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/slope_shaded.pdf',bbox_inches='tight')
 
 def plot_filled_dem(data,ls):
     # Choose colormap and data range normalization
@@ -182,7 +185,7 @@ def plot_filled_dem(data,ls):
 
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('figs/dem_filled_shaded.pdf',bbox_inches='tight')
+    plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/dem_filled_shaded.pdf',bbox_inches='tight')
 
 def plot_dem_only(data,ls):
     # Choose colormap and data range normalization
