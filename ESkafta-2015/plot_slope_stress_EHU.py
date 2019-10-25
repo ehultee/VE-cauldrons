@@ -77,7 +77,7 @@ def plot_elastic_stress(data, ls, saturation_stress=10):
 
 	ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
 	ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/stress_shaded.pdf',bbox_inches='tight')
+	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/stress_shaded-{}MPa.pdf'.format(saturation_stress),bbox_inches='tight')
 
 def plot_strain(data,ls):
     # Choose colormap and data range normalization
