@@ -60,6 +60,8 @@ def plot_elastic_stress(data,ls):
     ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
     ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
 
+    ax.set_xlim((0, 2000))
+    #ax.set_aspect(1)
     ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
     plt.show()
