@@ -20,7 +20,7 @@ def main(datadic,skafta):
 	ls = LightSource(azdeg=315, altdeg=45)
 #
    #plot_dem_only(data,ls)
-# 	plot_filled_dem(data,ls)
+	plot_filled_dem(data,ls)
     # plot_slope(data,ls)
     # plot_curvature(data,ls)
     # plot_strain(data,ls)
@@ -163,35 +163,41 @@ def plot_slope(data,ls):
     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
     plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/slope_shaded.pdf',bbox_inches='tight')
 
-def plot_filled_dem(data,ls):
+def plot_filled_dem(data, ls, axlabels=False):
     # Choose colormap and data range normalization
     # cmap = plt.get_cmap('cividis_r')
     # norm = Normalize(1550, 1700)
 
     # rgb = ls.shade_rgb(cmap(norm(data.dem)), data.filled_dem, blend_mode='overlay', fraction=0.6)
 
-    cmap = plt.get_cmap('viridis_r')
+	cmap = plt.get_cmap('viridis_r')
 
-    fig, ax = plt.subplots()
+	fig, ax = plt.subplots()
 
-    hatch = np.isnan(data.dem).astype(np.float32)
-    hatch[hatch < 0.5] = np.nan
+	hatch = np.isnan(data.dem).astype(np.float32)
+	hatch[hatch < 0.5] = np.nan
 
-    ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
-    cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
-    cf0 = ax.contourf(data.filled_dem,cmap=cmap,extend='both',levels=np.linspace(1550,1750,30),alpha=0.8)
-    cbar = fig.colorbar(cf0,ax=ax,ticks=[1550,1600,1650,1700,1750])
-    cbar.ax.set_ylabel('Surface elevation [m AMSL]',fontsize=12)
+	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
+	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
+	cf0 = ax.contourf(data.filled_dem,cmap=cmap,extend='both',levels=np.linspace(1550,1750,30),alpha=0.8)
+	cbar = fig.colorbar(cf0,ax=ax,ticks=[1550,1600,1650,1700,1750])
+	cbar.ax.set_ylabel('Surface elevation [m AMSL]',fontsize=12)
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
-
-    ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
-    ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
-
-    ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
-    ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
-    plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/dem_filled_shaded.pdf',bbox_inches='tight')
-
+	
+	ax.set_xlim((0, 2000))
+# 	ax.set_aspect(1)
+	if axlabels:
+		ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
+		ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
+		ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
+		ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
+	else:
+		ax.set_xticklabels(())
+		ax.set_yticklabels(())
+		
+	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/dem_filled_shaded.pdf',bbox_inches='tight')
+    
 def plot_dem_only(data,ls):
     # Choose colormap and data range normalization
     cmap = plt.get_cmap('cividis_r')
