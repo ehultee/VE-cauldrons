@@ -51,7 +51,7 @@ def main(datadic,skafta):
 #     ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
 #     plt.savefig('figs/strain_energy_shaded.pdf',bbox_inches='tight')
 
-def plot_elastic_stress(data, ls, saturation_stress=10):
+def plot_elastic_stress(data, ls, saturation_stress=10, axlabels=False):
 	"""Plot maximum stress attainable in a purely elastic deformation.
 	Optional argument: 
 		saturation_stress: default 30 MPa, can be increased or decreased to highlight qualitative features"""
@@ -71,12 +71,17 @@ def plot_elastic_stress(data, ls, saturation_stress=10):
 #     cbar.ax.set_yticklabels([format(),format(),format(),format(),format()])
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
-
-	ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
-	ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
-
-	ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
-	ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
+	
+	ax.set_xlim((0, 2000))
+# 	ax.set_aspect(1)
+	if axlabels:
+		ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
+		ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
+		ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
+		ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
+	else:
+		ax.set_xticklabels(())
+		ax.set_yticklabels(())
 	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/stress_shaded-{}MPa.pdf'.format(saturation_stress),bbox_inches='tight')
 
 def plot_strain(data,ls):
@@ -234,6 +239,7 @@ class Data():
         data.filled_diff = data.filled_diff[ul_row:lr_row,ul_col:lr_col]
         data.filled_slope = data.filled_slope[ul_row:lr_row,ul_col:lr_col]
         data.filled_curvature = data.filled_curvature[ul_row:lr_row,ul_col:lr_col]
+        data.mask = data.mask[ul_row:lr_row,ul_col:lr_col]
 
         data.cols = data.dem.shape[1]
         data.rows = data.dem.shape[0]
