@@ -20,6 +20,8 @@ from matplotlib import cm
 import math
 #from matplotlib.colors import LogNorm
 from shapely.geometry import *
+import sys
+sys.path.insert(0, 'Documents/GitHub/VE-cauldrons')
 from cauldron_funcs import *
 
 ## Haversine formula to calculate distance in m within cauldron (e.g. for radius)
@@ -259,43 +261,43 @@ colors = cmap([0.1, 0.2, 0.3, 0.5, 0.7, 0.9])
 #    plt.title('Eastern Skafta cauldron radial samples', fontsize=18)
 #    plt.show()
 
-plt.figure('Radial curvature')
-for j in radial_curvature_2015.keys():
-    #plt.plot(radial_axis, radial_curvature_2012[j], ls='-.') #, label='15 Oct 2012'
-    plt.plot(radial_axis, radial_curvature_2015[j], ls='-') #, label='10 Oct 2015'
-#for c in crevasse_locations:
-#    plt.axvline(x=c, color='Gainsboro')
-#plt.legend(loc='lower right')
-plt.axes().set_aspect(1)
-plt.axes().set_xlim(0, radial_length)
-#plt.axes().set_ylim(1400, 1800)
-#plt.axes().set_yticks([1550, 1600, 1650, 1700])
-#plt.axes().set_yticklabels(['1550', '1600', '1650', '1700'], fontsize=14)
-plt.axes().tick_params(which='both', labelsize=14)
-#plt.axes().set_xticklabels(['0', '1', '2', '3', '4', '5', '6'], fontsize=14)
-plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
-plt.axes().set_ylabel('Surface curvature', fontsize=16)
-plt.title('Eastern Skafta cauldron radial curvature', fontsize=18)
-plt.show()
+#plt.figure('Radial curvature')
+#for j in radial_curvature_2015.keys():
+#    #plt.plot(radial_axis, radial_curvature_2012[j], ls='-.') #, label='15 Oct 2012'
+#    plt.plot(radial_axis, radial_curvature_2015[j], ls='-') #, label='10 Oct 2015'
+##for c in crevasse_locations:
+##    plt.axvline(x=c, color='Gainsboro')
+##plt.legend(loc='lower right')
+#plt.axes().set_aspect(1)
+#plt.axes().set_xlim(0, radial_length)
+##plt.axes().set_ylim(1400, 1800)
+##plt.axes().set_yticks([1550, 1600, 1650, 1700])
+##plt.axes().set_yticklabels(['1550', '1600', '1650', '1700'], fontsize=14)
+#plt.axes().tick_params(which='both', labelsize=14)
+##plt.axes().set_xticklabels(['0', '1', '2', '3', '4', '5', '6'], fontsize=14)
+#plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
+#plt.axes().set_ylabel('Surface curvature', fontsize=16)
+#plt.title('Eastern Skafta cauldron radial curvature', fontsize=18)
+#plt.show()
 
-plt.figure('Elastic only')
-plt.plot(radial_axis, se_radii_2012[0], color='k', ls='-.') #, label='15 Oct 2012'
-plt.plot(radial_axis, se_radii_2015[0], color='k', ls='-', label='Obs.') #, label='10 Oct 2015'
-#plt.plot(radial_axis, elas_profile_array, color='r', ls=':', label='Elastic beam')
-plt.plot(radial_axis, LL_profile_array, color=colors[0], lw=2, label='Elastic plate')
-plt.fill_between(radial_axis, se_radii_2012[0], se_radii_2015[0], color='Gainsboro', hatch='/', edgecolor='DimGray', linewidth=0, alpha=0.7)
-plt.fill_between(radial_axis, se_radii_2015[0], (plt.axes().get_ylim()[0]), color='Azure')
-plt.legend(loc='lower left')
-plt.axes().set_aspect(5)
-plt.axes().set_xlim(0, radial_length)
-#plt.axes().set_yticks([1550, 1600, 1650, 1700])
-#plt.axes().set_yticklabels(['1550', '1600', '1650', '1700'], fontsize=14)
-plt.axes().tick_params(which='both', labelsize=14)
-#plt.axes().set_xticklabels(['0', '1', '2', '3', '4', '5', '6'], fontsize=14)
-plt.axes().set_xlabel('Along-transect distance [km]', fontsize=16)
-plt.axes().set_ylabel('Surface elevation [m a.s.l.]', fontsize=16)
-plt.title('Eastern Skafta cauldron radial transect: observed, ideal elastic. E={:.1E}'.format(ESkafta.youngmod), fontsize=18)
-plt.show()
+#plt.figure('Elastic only')
+#plt.plot(radial_axis, se_radii_2012[0], color='k', ls='-.') #, label='15 Oct 2012'
+#plt.plot(radial_axis, se_radii_2015[0], color='k', ls='-', label='Obs.') #, label='10 Oct 2015'
+##plt.plot(radial_axis, elas_profile_array, color='r', ls=':', label='Elastic beam')
+#plt.plot(radial_axis, LL_profile_array, color=colors[0], lw=2, label='Elastic plate')
+#plt.fill_between(radial_axis, se_radii_2012[0], se_radii_2015[0], color='Gainsboro', hatch='/', edgecolor='DimGray', linewidth=0, alpha=0.7)
+#plt.fill_between(radial_axis, se_radii_2015[0], (plt.axes().get_ylim()[0]), color='Azure')
+#plt.legend(loc='lower left')
+#plt.axes().set_aspect(5)
+#plt.axes().set_xlim(0, radial_length)
+##plt.axes().set_yticks([1550, 1600, 1650, 1700])
+##plt.axes().set_yticklabels(['1550', '1600', '1650', '1700'], fontsize=14)
+#plt.axes().tick_params(which='both', labelsize=14)
+##plt.axes().set_xticklabels(['0', '1', '2', '3', '4', '5', '6'], fontsize=14)
+#plt.axes().set_xlabel('Along-transect distance [km]', fontsize=16)
+#plt.axes().set_ylabel('Surface elevation [m a.s.l.]', fontsize=16)
+#plt.title('Eastern Skafta cauldron radial transect: observed, ideal elastic. E={:.1E}'.format(ESkafta.youngmod), fontsize=18)
+#plt.show()
 ##plt.savefig('Skafta-transect-aspect_5.png', transparent=True)
 #
 #plt.figure('Viscoelastic progression')
@@ -320,32 +322,11 @@ plt.show()
 #plt.show()
 #
 #
-plt.figure('Crevasse stresses')
-plt.plot(radial_axis, 1E-6*np.array(elas_plate_stress), color='k', ls='-', lw=2, label='Elastic plate')
-#plt.plot(radial_axis, 1E-6*np.array(ve_plate_stress_max), color='k', ls='-.', lw=2, label='Viscoelastic plate, t={} days'.format(np.ceil(max(times)/86400)))
-stress_norm = mpl.colors.Normalize(vmin = -1*max(elas_plate_stress), vmax = max(elas_plate_stress))
-#for c in crevasse_locations:
-for k in cl_dict.keys():
-    c_locs = cl_dict[k]
-    for c in c_locs:
-        idx = (np.abs(radial_axis - c)).argmin() #find index of closest radial value to crevasse location c
-        stress_scale = stress_norm(elas_plate_stress[idx]) #norm nearest stress val versus maximum tensile stress
-        stress_color = cm.get_cmap('coolwarm')(stress_scale)
-        plt.axvline(x=c, color=stress_color, alpha=0.5, lw=2.0)
-        #plt.annotate(s=str(k), xy=(c, 0)) #label crevasse line with which azimuth produced it
-plt.plot(radial_axis, np.zeros(len(radial_axis)), color='b', ls=':')
-plt.legend(loc='upper right')
-plt.axes().tick_params(which='both', labelsize=14)
-plt.axes().set_xlim(0, radial_length)
-plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
-plt.axes().set_ylabel('Radial stress [MPa]', fontsize=16)
-plt.title('Stress at cauldron surface', fontsize=18)
-plt.show()
 
 plt.figure('Crevasse stresses: outliers removed')
 plt.plot(radial_axis, 1E-6*np.array(elas_plate_stress), color='k', ls='-', lw=2)
-#plt.plot(radial_axis, 1E-6*np.array(ve_plate_stress_max), color='k', ls='-.', lw=2, label='Viscoelastic plate, t={} days'.format(np.ceil(max(times)/86400)))
-stress_norm = mpl.colors.Normalize(vmin = -1*max(elas_plate_stress), vmax = max(elas_plate_stress))
+#stress_norm = mpl.colors.Normalize(vmin = -1*max(elas_plate_stress), vmax = max(elas_plate_stress))
+stress_norm = mpl.colors.Normalize(vmin = -1*10E6, vmax = 10E6) #saturate at 10 MPa
 #for c in crevasse_locations:
 for k in cl_dict.keys():
     c_locs = cl_dict[k]
@@ -354,7 +335,7 @@ for k in cl_dict.keys():
     for c in c_locs:
         idx = (np.abs(radial_axis - c)).argmin() #find index of closest radial value to crevasse location c
         stress_scale = stress_norm(elas_plate_stress[idx]) #norm nearest stress val versus maximum tensile stress
-        stress_color = cm.get_cmap('coolwarm')(stress_scale)
+        stress_color = cm.get_cmap('Spectral')(stress_scale)
         plt.axvline(x=c, color=stress_color, alpha=0.5, lw=2.0)
         #plt.annotate(s=str(k), xy=(c, 0)) #label crevasse line with which azimuth produced it
 plt.plot(radial_axis, np.zeros(len(radial_axis)), color='b', ls=':')
@@ -362,41 +343,46 @@ plt.legend(loc='upper right')
 plt.axes().tick_params(which='both', labelsize=14)
 plt.axes().set_xlim(0, radial_length)
 plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
-plt.axes().set_ylabel('Radial stress [MPa]', fontsize=16)
-plt.title('Stress at cauldron surface', fontsize=18)
+plt.axes().set_ylabel('Radial stress $\sigma_{rr}$ [MPa]', fontsize=16)
+#plt.title('Stress at cauldron surface', fontsize=18)
 plt.show()
+### standalone colorbar for above
+#fig, ax = plt.subplots(figsize=(0.5,6))
+#cb1 = mpl.colorbar.ColorbarBase(plt.axes(), cmap=cm.get_cmap('Spectral'), norm=stress_norm, extend='both')
+#fig.show()
 
-# add annotations for zoomed-in first crevasses in each regime
-first_tensile_xy = (1058.081049934334, -8.4310432716652333) #annotation location for first crevasse in tensile regime
-first_compressive_xy = (664.37888645060593, 14.421886161521616) #annotation location for first crevasse in compressive regime
-# plot with annotations
-plt.figure('First-in-regime crevasses')
-plt.plot(radial_axis, 1E-6*np.array(elas_plate_stress), color='k', ls='-', lw=2)
-#plt.plot(radial_axis, 1E-6*np.array(ve_plate_stress_max), color='k', ls='-.', lw=2, label='Viscoelastic plate, t={} days'.format(np.ceil(max(times)/86400)))
-stress_norm = mpl.colors.Normalize(vmin = -1*max(elas_plate_stress), vmax = max(elas_plate_stress))
-#for c in crevasse_locations:
-for k in cl_dict.keys():
-    c_locs = cl_dict[k]
-    if k == 61: #removes a crevasse indicated near 0 stress, when radial profile indicates clearly nonzero stress region
-        continue
-    for c in c_locs:
-        idx = (np.abs(radial_axis - c)).argmin() #find index of closest radial value to crevasse location c
-        stress_scale = stress_norm(elas_plate_stress[idx]) #norm nearest stress val versus maximum tensile stress
-        stress_color = cm.get_cmap('coolwarm')(stress_scale)
-        plt.axvline(x=c, color=stress_color, alpha=0.5, lw=2.0)
-        #plt.annotate(s=str(k), xy=(c, 0)) #label crevasse line with which azimuth produced it
-plt.plot(radial_axis, np.zeros(len(radial_axis)), color='b', ls=':')
-plt.scatter(first_tensile_xy[0], first_tensile_xy[1], marker='*', s=20, color='b')
-plt.scatter(first_compressive_xy[0], first_compressive_xy[1], marker='*', s=20, color='r')
-#plt.annotate(s='Compressive stress: 14.4 MPa', xy=first_compressive_xy, fontsize=14)
-#plt.annotate(s='Tensile stress: -8.4 MPa', xy=first_tensile_xy, fontsize=14)
-plt.legend(loc='upper right')
-plt.axes().tick_params(which='both', labelsize=14)
-plt.axes().set_xlim(630, 1100)
-plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
-plt.axes().set_ylabel('Radial stress [MPa]', fontsize=16)
-plt.title('Stress at cauldron surface', fontsize=18)
-plt.show()
+
+## add annotations for zoomed-in first crevasses in each regime
+#first_tensile_xy = (1058.081049934334, -8.4310432716652333) #annotation location for first crevasse in tensile regime
+#first_compressive_xy = (664.37888645060593, 14.421886161521616) #annotation location for first crevasse in compressive regime
+## plot with annotations
+#plt.figure('First-in-regime crevasses')
+#plt.plot(radial_axis, 1E-6*np.array(elas_plate_stress), color='k', ls='-', lw=2)
+##plt.plot(radial_axis, 1E-6*np.array(ve_plate_stress_max), color='k', ls='-.', lw=2, label='Viscoelastic plate, t={} days'.format(np.ceil(max(times)/86400)))
+#stress_norm = mpl.colors.Normalize(vmin = -1*max(elas_plate_stress), vmax = max(elas_plate_stress))
+##for c in crevasse_locations:
+#for k in cl_dict.keys():
+#    c_locs = cl_dict[k]
+#    if k == 61: #removes a crevasse indicated near 0 stress, when radial profile indicates clearly nonzero stress region
+#        continue
+#    for c in c_locs:
+#        idx = (np.abs(radial_axis - c)).argmin() #find index of closest radial value to crevasse location c
+#        stress_scale = stress_norm(elas_plate_stress[idx]) #norm nearest stress val versus maximum tensile stress
+#        stress_color = cm.get_cmap('coolwarm')(stress_scale)
+#        plt.axvline(x=c, color=stress_color, alpha=0.5, lw=2.0)
+#        #plt.annotate(s=str(k), xy=(c, 0)) #label crevasse line with which azimuth produced it
+#plt.plot(radial_axis, np.zeros(len(radial_axis)), color='b', ls=':')
+#plt.scatter(first_tensile_xy[0], first_tensile_xy[1], marker='*', s=20, color='b')
+#plt.scatter(first_compressive_xy[0], first_compressive_xy[1], marker='*', s=20, color='r')
+##plt.annotate(s='Compressive stress: 14.4 MPa', xy=first_compressive_xy, fontsize=14)
+##plt.annotate(s='Tensile stress: -8.4 MPa', xy=first_tensile_xy, fontsize=14)
+#plt.legend(loc='upper right')
+#plt.axes().tick_params(which='both', labelsize=14)
+#plt.axes().set_xlim(630, 1100)
+#plt.axes().set_xlabel('Radial distance [m]', fontsize=16)
+#plt.axes().set_ylabel('Radial stress [MPa]', fontsize=16)
+#plt.title('Stress at cauldron surface', fontsize=18)
+#plt.show()
 #
 ### individual plots per azimuth
 #for k in range(70, 85):
