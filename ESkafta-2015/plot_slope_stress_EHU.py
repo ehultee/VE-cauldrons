@@ -20,11 +20,12 @@ def main(datadic,skafta):
 	ls = LightSource(azdeg=315, altdeg=45)
 #
    #plot_dem_only(data,ls)
-	plot_filled_dem(data,ls)
+# 	plot_filled_dem(data,ls)
+	plot_mask(data,ls)
     # plot_slope(data,ls)
     # plot_curvature(data,ls)
     # plot_strain(data,ls)
-	plot_elastic_stress(data,ls)
+# 	plot_elastic_stress(data,ls)
 #     plot_strain_energy_density(data,ls)
 
 # def plot_strain_energy_density(data,ls):
@@ -214,6 +215,43 @@ def plot_dem_only(data,ls):
     fig.colorbar(im)
 
     plt.savefig('figs/dem_only_shaded.pdf',bbox_inches='tight')
+
+def plot_mask(data, ls, axlabels=False):
+    # Choose colormap and data range normalization
+    # cmap = plt.get_cmap('cividis_r')
+    # norm = Normalize(1550, 1700)
+
+    # rgb = ls.shade_rgb(cmap(norm(data.dem)), data.filled_dem, blend_mode='overlay', fraction=0.6)
+
+	cmap = plt.get_cmap('Greys')
+
+	fig, ax = plt.subplots()
+
+	hatch = np.isnan(data.dem).astype(np.float32)
+	hatch[hatch < 0.5] = np.nan
+	
+	crevasses = np.isnan(data.mask).astype(np.float32)
+	crevasses[crevasses < 0.5] = np.nan
+	
+	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
+	cf1 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
+# 	cf2 = ax.contourf(crevasses, hatches=['xxx'], colors='Indigo')
+	cf0 = ax.contourf(data.mask,cmap=cmap, alpha=0.8)
+    # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
+    # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
+	
+	ax.set_xlim((0, 2000))
+# 	ax.set_aspect(1)
+	if axlabels:
+		ax.set_xticklabels(['%1.1f' % x for x in data.hdr['spx']*1.e-3*ax.get_xticks()])
+		ax.set_yticklabels(['%1.1f' % (4-x) for x in data.hdr['spy']*1.e-3*ax.get_yticks()])
+		ax.set_xlabel('Relative $x$ position [km]',fontsize=12)
+		ax.set_ylabel('Relative $y$ position [km]',fontsize=12)
+	else:
+		ax.set_xticklabels(())
+		ax.set_yticklabels(())
+		
+	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/mask.pdf',bbox_inches='tight')
 
 class Data():
     def __init__(data,datafiles,skafta):
