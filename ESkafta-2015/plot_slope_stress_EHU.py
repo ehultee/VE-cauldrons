@@ -298,19 +298,27 @@ class Data():
         with open(data.files['filled_dem'],'r') as fid:
             data.filled_dem = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.filled_dem.shape[0] != data.hdr['rows']:
-                raise ValueError('mask not the right size according to header')
+                raise ValueError('filled dem not the right size according to header')
         with open(data.files['filled_diff'],'r') as fid:
             data.filled_diff = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.filled_diff.shape[0] != data.hdr['rows']:
-                raise ValueError('mask not the right size according to header')
+                raise ValueError('diff not the right size according to header')
         with open(data.files['filled_slope'],'r') as fid:
             data.filled_slope = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.filled_slope.shape[0] != data.hdr['rows']:
-                raise ValueError('mask not the right size according to header')
+                raise ValueError('slope not the right size according to header')
         with open(data.files['filled_curvature'],'r') as fid:
             data.filled_curvature = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.filled_curvature.shape[0] != data.hdr['rows']:
-                raise ValueError('mask not the right size according to header')
+                raise ValueError('curvature not the right size according to header')
+        with open(data.files['filled_ddx2'],'r') as fid:
+            data.filled_ddx2 = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
+            if data.filled_ddx2.shape[0] != data.hdr['rows']:
+                raise ValueError('ddx2 not the right size according to header')
+        with open(data.files['filled_ddy2'],'r') as fid:
+            data.filled_ddy2 = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
+            if data.filled_ddy2.shape[0] != data.hdr['rows']:
+                raise ValueError('ddy2 not the right size according to header')
         with open(data.files['mask'], 'r') as fid:
             data.mask = np.fromfile(fid, dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.mask.shape[0] != data.hdr['rows']:
@@ -348,6 +356,8 @@ if __name__=='__main__':
 	datadic['filled_diff'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
 	datadic['filled_slope'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
 	datadic['filled_curvature'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
+	datadic['filled_ddx2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
+	datadic['filled_ddy2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
 
 	skafta = {}
 #    skafta['ul_polstr'] = [1294500.,-2489500.]
