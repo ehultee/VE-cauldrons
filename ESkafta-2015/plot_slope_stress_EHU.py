@@ -254,20 +254,45 @@ def plot_mask(data, ls, axlabels=False):
 	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/mask.pdf',bbox_inches='tight')
 
 class Data():
-    def __init__(data,datafiles,skafta):
+    def __init__(data,datafiles,skafta, youngmod=1.e9, poisson_nu=0.3, mean_thickness=300., sign_compression=1.):
         data.files = datafiles
         data.skafta = skafta
         data.hdr = data.get_header('hdr')
+        data.youngs = youngmod ### Youngs modulus in Pa
+        data.poissons = poisson_nu ### Poissons ratio (dimensionless)
+        data.thickness_m = mean_thickness ### ice thickness in m
+        data.sign_compression = sign_compression  ### sign convention applied for compressive stress/strain (-1 for positive tension)
+
 
     def calc_elastic_stress(data):
-        data.youngs = 1.e9 ### Youngs modulus in Pa
-        data.poissons = 0.3 ### Poissons ratio
-        data.thickness_m = 300.
-
-        data.sign_compression = 1.  ### sign convention for compressive stress/strain (-1 for positive tension)
+		"""Compute the surface elastic stress field from the mean curvature.
+		This is an order-of-magnitude estimate that draws on an assumption of cylindrical symmetry.
+		Use calc_maxprinc_stress() for more general maximum principal stress."""
         data.filled_strain = data.sign_compression * 0.5 * data.thickness_m * data.filled_curvature
         data.filled_stress = data.youngs * data.filled_strain / (1.-data.poissons**2)
         data.filled_strainenergy = data.filled_strain*data.filled_stress
+    
+    def calc_maxprinc_stress(data):
+    	"""Compute surface stresses sigma_x, sigma_y, tau_xy and return maximum principal stress.
+    	Return sigma_2 (min) instead of sigma_1 (max) if sign convention calls for negative tension, as we are studying tension.
+    	Drawing on Ugural (2017) definition of stresses for arbitrary thin plate bending geometry."""
+    	## compute sigma_x
+    	prefactor = data.sign_compression * 0.5 * data.thickness_m * data.youngs / (1.-data.poissons**2)
+    	sigma_x = prefactor * (data.filled_ddx2 + (data.poissons * data.filled_ddy2))
+    	## compute sigma_y
+    	sigma_y = prefactor * (data.filled_ddy2 + (data.poissons * data.filled_ddx2))
+    	#compute tau_xy
+    	tau_xy = (data.sign_compression * 0.5 * data.thickness_m /(1.+data.poissons)) * data.filled_ddxdy
+    	#compute sigma_max and sigma_min
+    	A = ((sigma_x + sigma_y)/2)
+    	B = np.sqrt(((sigma_x - sigma_y)/2)**2 + tau_xy**2)
+    	sigma_max = A + B
+    	sigma_min = A - B
+    	if data.sign_compression>0:
+    		data.filled_maxprinc_stress = sigma_min
+    	else:
+    		data.filled_maxprinc_stress = sigma_max
+    	
 
     def region_of_interest(data, ul_row=None, ul_col=None, lr_row=None, lr_col=None):
         """Get row and column of DEM to focus on Skafta"""
@@ -319,6 +344,10 @@ class Data():
             data.filled_ddy2 = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.filled_ddy2.shape[0] != data.hdr['rows']:
                 raise ValueError('ddy2 not the right size according to header')
+        with open(data.files['filled_ddxdy'],'r') as fid:
+            data.filled_ddxdy = np.fromfile(fid,dtype=np.float32).reshape(-1,data.hdr['cols'])
+            if data.filled_ddy2.shape[0] != data.hdr['rows']:
+                raise ValueError('ddxdy not the right size according to header')
         with open(data.files['mask'], 'r') as fid:
             data.mask = np.fromfile(fid, dtype=np.float32).reshape(-1,data.hdr['cols'])
             if data.mask.shape[0] != data.hdr['rows']:
@@ -358,6 +387,7 @@ if __name__=='__main__':
 	datadic['filled_curvature'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
 	datadic['filled_ddx2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
 	datadic['filled_ddy2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
+	datadic['filled_ddxdy'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddxdy.bin'
 
 	skafta = {}
 #    skafta['ul_polstr'] = [1294500.,-2489500.]
