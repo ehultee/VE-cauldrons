@@ -10,10 +10,6 @@ from scipy.interpolate import interp2d,griddata,SmoothBivariateSpline
 
 datadic = {}
 ### inputs
-### commented versions are the full DEM as given by ArcticDEM
-# datadic['hdr'] = '../diff/skaftar_east/SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem.hdr'
-# datadic['dem'] = '../diff/skaftar_east/SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_medflt.bin'
-# datadic['mask'] = '../diff/skaftar_east/SETSM_WV02_20151010_dem_highpass_mask_smooth.bin'
 datadic['hdr'] = '../diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.hdr'
 datadic['dem'] = '../diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.bin'
 datadic['hdr2'] = '../diff/skaftar_east/SETSM_WV02_20121015_skaftar_east_medflt.hdr'
@@ -29,16 +25,7 @@ datadic['output_slope2'] = '../SETSM_WV02_20121015_skaftar_east_dem_filled_slope
 datadic['output_laplacian'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_laplacian.bin'
 datadic['output_curvature'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
 datadic['output_skafta_xyz'] = 'SETSM_WV02_20151010_nocrevasse_skafta.xyz'
-### old outputs from when I was using the full DEM rather than the cropped
-# datadic['output_dem'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled.bin'
-# datadic['output_diff'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_diff.bin'
-# datadic['output_slope'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_slope.bin'
-# datadic['output_dem2'] = '../SETSM_WV02_20121015_103001001BA10100_103001001D24CE00_seg1_2m_v2.0_dem_filled.bin'
-# datadic['output_diff2'] = '../SETSM_WV02_20121015_103001001BA10100_103001001D24CE00_seg1_2m_v2.0_dem_filled_diff.bin'
-# datadic['output_slope2'] = '../SETSM_WV02_20121015_103001001BA10100_103001001D24CE00_seg1_2m_v2.0_dem_filled_slope.bin'
-# datadic['output_laplacian'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_laplacian.bin'
-# datadic['output_curvature'] = '../SETSM_WV02_20151010_103001004A666D00_103001004A911400_seg1_2m_v2.0_dem_filled_curvature.bin'
-# 
+
 def main(datafiles):
     skafta = {}
     skafta['ul_polstr'] = [1294500.,-2489500.]
