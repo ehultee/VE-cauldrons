@@ -26,6 +26,7 @@ datadic['output_laplacian'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_la
 datadic['output_curvature'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
 datadic['output_ddx2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
 datadic['output_ddy2'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
+datadic['output_ddxdy'] = '../SETSM_WV02_20151010_skaftar_east_dem_filled_ddxdy.bin'
 datadic['output_skafta_xyz'] = 'SETSM_WV02_20151010_nocrevasse_skafta.xyz'
 
 def main(datafiles):
@@ -133,6 +134,8 @@ def main(datafiles):
     data.ddx2[ul_row:lr_row,ul_col:lr_col] = data.dem_skafta_filled_ddx2
     data.ddy2 = 0.*data.dem
     data.ddy2[ul_row:lr_row,ul_col:lr_col] = data.dem_skafta_filled_ddy2
+    data.ddxdy = 0.*data.dem
+    data.ddxdy[ul_row:lr_row,ul_col:lr_col] = data.dem_skafta_filled_ddxdy
 
 
     print('writing')
@@ -148,6 +151,8 @@ def main(datafiles):
     	data.ddx2.flatten().astype(np.float32).tofile(fid)
     with open(datadic['output_ddy2'],'w') as fid:
     	data.ddy2.flatten().astype(np.float32).tofile(fid)
+    with open(datadic['output_ddxdy'],'w') as fid:
+    	data.ddxdy.flatten().astype(np.float32).tofile(fid)
 
     if True:
         data.dem[:,:] = 0.
