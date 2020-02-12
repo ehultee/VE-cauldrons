@@ -21,7 +21,7 @@ def main(datadic,skafta):
 	ls = LightSource(azdeg=315, altdeg=45)
 #
    #plot_dem_only(data,ls)
-# 	plot_filled_dem(data,ls)
+	plot_filled_dem(data,ls)
 # 	plot_mask(data,ls)
     # plot_slope(data,ls)
     # plot_curvature(data,ls)
@@ -65,11 +65,11 @@ def plot_elastic_stress(data, ls, saturation_stress=10, axlabels=False):
 	hatch = np.isnan(data.dem).astype(np.float32)
 	hatch[hatch < 0.5] = np.nan
 
-	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
-	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
 	cf0 = ax.contourf(1.e-6*data.filled_maxprinc_stress,cmap=cmap,extend='both',levels=np.linspace(-1*saturation_stress,saturation_stress,30),alpha=0.8)
+	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
+	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4', alpha=0.5)
 	cbar = fig.colorbar(cf0,ax=ax,ticks=[-1*saturation_stress,-0.5*saturation_stress,0,0.5*saturation_stress,saturation_stress])
-	cbar.ax.set_ylabel('Elastic surface stresses [MPa]',fontsize=12)
+	cbar.ax.set_ylabel('Surface max. princ. stress [MPa]',fontsize=12)
 #     cbar.ax.set_yticklabels([format(),format(),format(),format(),format()])
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
@@ -179,11 +179,11 @@ def plot_filled_dem(data, ls, axlabels=False):
 	hatch = np.isnan(data.dem).astype(np.float32)
 	hatch[hatch < 0.5] = np.nan
 
-	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
-	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
 	cf0 = ax.contourf(data.filled_dem,cmap=cmap,extend='both',levels=np.linspace(1550,1750,30),alpha=0.8)
+	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
+	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4', alpha=0.5)
 	cbar = fig.colorbar(cf0,ax=ax,ticks=[1550,1600,1650,1700,1750])
-	cbar.ax.set_ylabel('Surface elevation [m AMSL]',fontsize=12)
+	cbar.ax.set_ylabel('Surface elevation [m a.s.l.]',fontsize=12)
     # cs0 = ax.contour(data.dem,colors='0.4',linewidths=0.5,levels=np.arange(1500,1800,10))
     # ax.clabel(cs0,list(np.arange(1550,1800,50)),inline=1,fontsize=8,fmt='%d')
 	
