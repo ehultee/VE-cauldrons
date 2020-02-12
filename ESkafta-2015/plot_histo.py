@@ -7,6 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import LightSource, Normalize
 from scipy.interpolate import interp2d,griddata,SmoothBivariateSpline
+sys.path.insert(0, 'Documents/GitHub/VE-cauldrons/ESkafta-2015')
 from plot_slope_stress_EHU import Data #import BM's Data class for consistent I/O
 
 fpath = 'Documents/6. MIT/Skaftar collapse/Crevasse_mask/'
@@ -22,6 +23,9 @@ datadic['filled_dem'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled.bin'
 datadic['filled_diff'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
 datadic['filled_slope'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
 datadic['filled_curvature'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
+datadic['filled_ddx2'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
+datadic['filled_ddy2'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
+datadic['filled_ddxdy'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddxdy.bin'
 
 #skafta = {}
 #skafta['ul_polstr'] = [1294500.,-2489500.]
@@ -33,6 +37,7 @@ data = Data(datadic,skafta)
 data.read_data()
 data.region_of_interest(ul_row=948, ul_col=2791, lr_row=2851, lr_col=5126)
 data.calc_elastic_stress()
+data.calc_maxprinc_stress()
 data.dem[data.dem < 0] = np.nan #mask nodata areas
 
 ## Create a light source for hillshade plotting
@@ -70,18 +75,21 @@ def plot_elastic_stress(data,ls):
 plot_elastic_stress(data, ls)
 
 ## Extract and make histogram of stress values in crevassed and non-crevassed areas
-intact_stress_sample = 1E-6*np.array(data.filled_stress[data.mask==0]) #express in MPa
-frac_stress_sample = 1E-6*np.array(data.filled_stress[data.mask==1])
+#intact_stress_sample = 1E-6*np.array(data.filled_stress[data.mask==0]) #express in MPa
+#frac_stress_sample = 1E-6*np.array(data.filled_stress[data.mask==1])
+intact_stress_sample = 1E-6*np.array(data.filled_maxprinc_stress[data.mask==0]) #express in MPa
+frac_stress_sample = 1E-6*np.array(data.filled_maxprinc_stress[data.mask==1])
 
 intact_weights = np.ones_like(intact_stress_sample)/float(len(intact_stress_sample))
 frac_weights = np.ones_like(frac_stress_sample)/float(len(frac_stress_sample))
 bins = np.linspace(-10, 10, num=40)
 
 plt.figure()
-plt.fill_between(x=(0, 10), y1=0.12, y2=0, color='Gainsboro', alpha=0.5)
-plt.hist((intact_stress_sample, frac_stress_sample), bins=bins, weights=(intact_weights, frac_weights), color=('LightBlue', 'Maroon'), label=('intact', 'fractured'))
+plt.fill_between(x=(0, 10), y1=0.12, y2=0, color='MidnightBlue', alpha=0.5)
+#plt.fill_between(x=(-10, 0), y1=0.12, y2=0, color='FireBrick', alpha=0.5)
+plt.hist((intact_stress_sample, frac_stress_sample), bins=bins, weights=(intact_weights, frac_weights), color=('0.4', 'Gainsboro'), label=('intact', 'fractured'))
 plt.legend(loc='best')
-plt.axes().set_xlabel('Surface elastic stress [MPa]', fontsize=18)
+plt.axes().set_xlabel('Surface max. principal stress [MPa]', fontsize=18)
 plt.axes().set_ylabel('Normalized frequency', fontsize=18)
 plt.axes().tick_params(which='both', labelsize=14)
 plt.axes().set_ylim((0, 0.12))
