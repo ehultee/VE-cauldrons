@@ -14,6 +14,7 @@ def main(datadic,skafta):
 	data.read_data()
 	data.region_of_interest(ul_row=948, ul_col=2791, lr_row=2851, lr_col=5126)
 	data.calc_elastic_stress()
+	data.calc_maxprinc_stress()
 	data.dem[data.dem < 0] = np.nan
 
    # Create a light source
@@ -21,11 +22,11 @@ def main(datadic,skafta):
 #
    #plot_dem_only(data,ls)
 # 	plot_filled_dem(data,ls)
-	plot_mask(data,ls)
+# 	plot_mask(data,ls)
     # plot_slope(data,ls)
     # plot_curvature(data,ls)
     # plot_strain(data,ls)
-# 	plot_elastic_stress(data,ls)
+	plot_elastic_stress(data,ls)
 #     plot_strain_energy_density(data,ls)
 
 # def plot_strain_energy_density(data,ls):
@@ -66,7 +67,7 @@ def plot_elastic_stress(data, ls, saturation_stress=10, axlabels=False):
 
 	ax.imshow(ls.hillshade(data.dem,vert_exag=2,dx=data.hdr['spx'],dy=data.hdr['spy']),cmap='gray')
 	cf00 = ax.contourf(hatch,hatches=['xxx'],cmap=None,colors='0.4')
-	cf0 = ax.contourf(1.e-6*data.filled_stress,cmap=cmap,extend='both',levels=np.linspace(-1*saturation_stress,saturation_stress,30),alpha=0.8)
+	cf0 = ax.contourf(1.e-6*data.filled_maxprinc_stress,cmap=cmap,extend='both',levels=np.linspace(-1*saturation_stress,saturation_stress,30),alpha=0.8)
 	cbar = fig.colorbar(cf0,ax=ax,ticks=[-1*saturation_stress,-0.5*saturation_stress,0,0.5*saturation_stress,saturation_stress])
 	cbar.ax.set_ylabel('Elastic surface stresses [MPa]',fontsize=12)
 #     cbar.ax.set_yticklabels([format(),format(),format(),format(),format()])
@@ -83,7 +84,7 @@ def plot_elastic_stress(data, ls, saturation_stress=10, axlabels=False):
 	else:
 		ax.set_xticklabels(())
 		ax.set_yticklabels(())
-	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/stress_shaded-{}MPa.pdf'.format(saturation_stress),bbox_inches='tight')
+	plt.savefig('/Users/ehultee/Documents/6. MIT/Skaftar collapse/Crevasse_mask/figs/maxprinc_stress_shaded-{}MPa.pdf'.format(saturation_stress),bbox_inches='tight')
 
 def plot_strain(data,ls):
     # Choose colormap and data range normalization
@@ -265,17 +266,17 @@ class Data():
 
 
     def calc_elastic_stress(data):
-		"""Compute the surface elastic stress field from the mean curvature.
-		This is an order-of-magnitude estimate that draws on an assumption of cylindrical symmetry.
-		Use calc_maxprinc_stress() for more general maximum principal stress."""
+# 		"""Compute the surface elastic stress field from the mean curvature.  
+# 		This is an order-of-magnitude estimate that draws on an assumption of cylindrical symmetry.  
+# 		Use calc_maxprinc_stress() for more general maximum principal stress."""
         data.filled_strain = data.sign_compression * 0.5 * data.thickness_m * data.filled_curvature
         data.filled_stress = data.youngs * data.filled_strain / (1.-data.poissons**2)
         data.filled_strainenergy = data.filled_strain*data.filled_stress
     
     def calc_maxprinc_stress(data):
-    	"""Compute surface stresses sigma_x, sigma_y, tau_xy and return maximum principal stress.
-    	Return sigma_2 (min) instead of sigma_1 (max) if sign convention calls for negative tension, as we are studying tension.
-    	Drawing on Ugural (2017) definition of stresses for arbitrary thin plate bending geometry."""
+#     	"""Compute surface stresses sigma_x, sigma_y, tau_xy and return maximum principal stress.
+#     	Return sigma_2 (min) instead of sigma_1 (max) if sign convention calls for negative tension, as we are studying tension.
+#     	Drawing on Ugural (2017) definition of stresses for arbitrary thin plate bending geometry."""
     	## compute sigma_x
     	prefactor = data.sign_compression * 0.5 * data.thickness_m * data.youngs / (1.-data.poissons**2)
     	sigma_x = prefactor * (data.filled_ddx2 + (data.poissons * data.filled_ddy2))
@@ -288,11 +289,12 @@ class Data():
     	B = np.sqrt(((sigma_x - sigma_y)/2)**2 + tau_xy**2)
     	sigma_max = A + B
     	sigma_min = A - B
-    	if data.sign_compression>0:
-    		data.filled_maxprinc_stress = sigma_min
-    	else:
-    		data.filled_maxprinc_stress = sigma_max
-    	
+    	data.filled_maxprinc_stress = sigma_max
+#     	if data.sign_compression<0:  ### condition that tries to return "most tensile" stress...but possibly misguided
+#     		data.filled_maxprinc_stress = sigma_min
+#     	else:
+#     		data.filled_maxprinc_stress = sigma_max
+
 
     def region_of_interest(data, ul_row=None, ul_col=None, lr_row=None, lr_col=None):
         """Get row and column of DEM to focus on Skafta"""
@@ -308,6 +310,9 @@ class Data():
         data.filled_diff = data.filled_diff[ul_row:lr_row,ul_col:lr_col]
         data.filled_slope = data.filled_slope[ul_row:lr_row,ul_col:lr_col]
         data.filled_curvature = data.filled_curvature[ul_row:lr_row,ul_col:lr_col]
+        data.filled_ddx2 = data.filled_ddx2[ul_row:lr_row,ul_col:lr_col]
+        data.filled_ddy2 = data.filled_ddy2[ul_row:lr_row,ul_col:lr_col]
+        data.filled_ddxdy = data.filled_ddxdy[ul_row:lr_row,ul_col:lr_col]
         data.mask = data.mask[ul_row:lr_row,ul_col:lr_col]
 
         data.cols = data.dem.shape[1]
