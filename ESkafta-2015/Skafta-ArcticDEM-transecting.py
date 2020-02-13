@@ -108,6 +108,39 @@ def sample_transect(endpts, DEM_surface1, DEM_surface2=None, cauldron_name='East
 
     return out_dict
 
+def plot_plain_transect(in_dict, colormap=cm.get_cmap('winter_r')):
+    """Read in quantities and plot raw profile from a transect dictionary
+    """
+    xaxis = in_dict['xaxis']
+    sevals_1 = in_dict['initial_surface_obs']
+    try:
+        sevals_2 = in_dict['second_surface_obs']
+    except KeyError:
+        print 'No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name'])
+        sevals_2 = sevals_1
+    transect_length = max(xaxis)
+
+    fig = plt.figure('Transect profile, {}'.format(in_dict['name']), figsize=(7, 3))
+    plt.plot(xaxis, sevals_1, color='k', ls='-.', label='15 Oct 2012')
+    plt.plot(xaxis, sevals_2, color='k', ls='-',  label='10 Oct 2015')
+    plt.fill_between(xaxis, sevals_1, sevals_2, color='Gainsboro', hatch='/', edgecolor='DimGray', linewidth=0, alpha=0.7)
+    plt.fill_between(xaxis, sevals_2, (plt.axes().get_ylim()[0]), color='Azure')
+    plt.legend(loc='upper right')
+    plt.axes().set_aspect(5)
+    plt.axes().set_xlim(0, transect_length)
+    plt.axes().set_yticks([1550, 1600, 1650, 1700])
+    plt.axes().set_ylim((1525, 1750))
+    #plt.axes().set_yticklabels(['1550', '1600', '1650', '1700'], fontsize=14)
+    plt.axes().tick_params(which='both', labelsize=14)
+    #plt.axes().set_xticklabels(['0', '1', '2', '3', '4', '5', '6'], fontsize=14)
+    plt.axes().set_xlabel('Along-transect distance [m]', fontsize=16)
+    plt.axes().set_ylabel('Surface elevation [m a.s.l.]', fontsize=16)
+    #plt.title('Eastern Skafta cauldron transect: observed, ideal elastic, ideal viscoelastic. E={:.1E}'.format(ESkafta.youngmod), fontsize=18)
+    plt.show()
+
+    return fig #return the figure instance so it can be modified
+
+
 def plot_elastic_transect(in_dict, colormap=cm.get_cmap('winter_r')):
     """Read in quantities and plot elastic profile from a transect dictionary
     """
@@ -200,7 +233,7 @@ def plot_VE_transect(in_dict, colormap=cm.get_cmap('winter_r'), make_legend=Fals
     return fig  
 
 
-## Test transecting functions
+## Plot transects for manuscript
 #endpoints_1 = [(-17.542113802658239, 64.488141277357315),
 # (-17.48586677277758, 64.486397775690023)] #previous preset
 endpoints_1 = [(-17.535314402804026, 64.495192470298178),
