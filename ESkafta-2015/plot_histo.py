@@ -23,9 +23,9 @@ datadic['filled_dem'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled.bin'
 datadic['filled_diff'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_diff.bin'
 datadic['filled_slope'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_slope.bin'
 datadic['filled_curvature'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_curvature.bin'
-datadic['filled_ddx2'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
-datadic['filled_ddy2'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
-datadic['filled_ddxdy'] = fpath+'/SETSM_WV02_20151010_skaftar_east_dem_filled_ddxdy.bin'
+datadic['filled_ddx2'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_ddx2.bin'
+datadic['filled_ddy2'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_ddy2.bin'
+datadic['filled_ddxdy'] = fpath+'SETSM_WV02_20151010_skaftar_east_dem_filled_ddxdy.bin'
 
 #skafta = {}
 #skafta['ul_polstr'] = [1294500.,-2489500.]

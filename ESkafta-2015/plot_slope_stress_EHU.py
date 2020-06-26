@@ -398,4 +398,4 @@ if __name__=='__main__':
 #    skafta['ul_polstr'] = [1294500.,-2489500.]
 #    skafta['lr_polstr'] = [1298500.,-2493500.]
 #
-main(datadic,skafta)
+# main(datadic,skafta)
