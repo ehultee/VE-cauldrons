@@ -10,7 +10,7 @@ from scipy.interpolate import interp2d,griddata,SmoothBivariateSpline
 sys.path.insert(0, 'Documents/GitHub/VE-cauldrons/ESkafta-2015')
 from plot_slope_stress_EHU import Data #import BM's Data class for consistent I/O
 
-fpath = 'Documents/6. MIT/Skaftar collapse/Crevasse_mask/'
+fpath = '/Users/lizz/Documents/UMich MBP import/Documents - UM_MBP/6. MIT/Skaftar collapse/Crevasse_mask/'
 datadic = {}
 ### inputs - cropped DEMs
 datadic['hdr'] = fpath+'diff/skaftar_east/SETSM_WV02_20151010_skaftar_east_medflt.hdr'
