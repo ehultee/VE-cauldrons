@@ -14,12 +14,12 @@ from matplotlib import cm
 from matplotlib.patches import Rectangle
 import math
 import sys
-sys.path.insert(0, 'Documents/GitHub/VE-cauldrons')
+sys.path.insert(0, '/Users/lizz/Documents/GitHub/VE-cauldrons')
 from cauldron_funcs import *
 
 
 ## Read in ArcticDEM surface
-skafta_region_path = 'Documents/6. MIT/Skaftar collapse/data/arcticDEM/'
+skafta_region_path = '/Users/lizz/Documents/UMich MBP import/Documents - UM_MBP/6. MIT/Skaftar collapse/data/arcticDEM/'
 nc_20121015_path = skafta_region_path + 'subset_nc/SETSM_WV02_20121015_skaftar_east_ll.nc'
 nc_20151010_path = skafta_region_path + 'subset_nc/SETSM_WV02_20151010_skaftar_east_ll.nc'
 
@@ -116,7 +116,7 @@ def plot_plain_transect(in_dict, colormap=cm.get_cmap('winter_r')):
     try:
         sevals_2 = in_dict['second_surface_obs']
     except KeyError:
-        print 'No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name'])
+        print('No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name']))
         sevals_2 = sevals_1
     transect_length = max(xaxis)
 
@@ -149,7 +149,7 @@ def plot_elastic_transect(in_dict, colormap=cm.get_cmap('winter_r')):
     try:
         sevals_2 = in_dict['second_surface_obs']
     except KeyError:
-        print 'No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name'])
+        print('No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name']))
         sevals_2 = sevals_1
     elastic_profile = in_dict['elastic_profile']
     transect_length = max(xaxis)
@@ -189,13 +189,13 @@ def plot_VE_transect(in_dict, colormap=cm.get_cmap('winter_r'), make_legend=Fals
     try:
         sevals_2 = in_dict['second_surface_obs']
     except KeyError:
-        print 'No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name'])
+        print('No secondary surface observations saved on transect {}. Setting identical to first surface for plotting.'.format(in_dict['name']))
         sevals_2 = sevals_1
     try:
         ve_profile_series = in_dict['VE_profiles']
         times = in_dict['VE_times'][::10] 
     except KeyError:
-        print 'No viscoelastic profiles saved. Unable to proceed.'
+        print('No viscoelastic profiles saved. Unable to proceed.')
         return #exit the function
     try:
         elastic_profile = in_dict['elastic_profile']
@@ -243,8 +243,8 @@ endpoints_2 = [(-17.530965405648303, 64.478974272497283),
 endpoints_3 = [(-17.543170655730489, 64.487616864746443),
  (-17.484529339243668, 64.486123083370046)] #more crevassing
 
-transect_dict_1 = sample_transect(endpoints_1, sefunc_2012, sefunc_2015, cauldron_name='Transect 1')
-transect_dict_2 = sample_transect(endpoints_2, sefunc_2012, sefunc_2015, cauldron_name='Transect 2')
+# transect_dict_1 = sample_transect(endpoints_1, sefunc_2012, sefunc_2015, cauldron_name='Transect 1')
+# transect_dict_2 = sample_transect(endpoints_2, sefunc_2012, sefunc_2015, cauldron_name='Transect 2')
 transect_dict_3 = sample_transect(endpoints_3, sefunc_2012, sefunc_2015, cauldron_name='Transect 3')
 
 
