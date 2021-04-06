@@ -1,0 +1,13 @@
+name: jokull
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - numpy
+  - matplotlib
+  - scipy
+  - gdal
+  - netcdf4
+  - sympy
+  - jupyterlab
