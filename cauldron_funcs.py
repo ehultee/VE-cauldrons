@@ -36,9 +36,20 @@ class Ice(object):
         self.youngmod = youngmod
         self.poisson_nu = poisson_nu
         self.dyn_viscos = dyn_viscos
-        self.shearmod = self.youngmod / (2*(1+self.poisson_nu))
-        self.lame_lambda = (self.youngmod * self.poisson_nu)/((1+self.poisson_nu)*(1-2*self.poisson_nu))
-        self.t_relax = dyn_viscos/self.shearmod
+        
+    @property
+    def shearmod(self):
+        return self.youngmod / (2*(1+self.poisson_nu))
+        
+    @property
+    def lame_lambda(self):
+        return (self.youngmod * self.poisson_nu)/((1+self.poisson_nu)*(1-2*self.poisson_nu))
+
+    @property
+    def t_relax(self):
+        return self.dyn_viscos/self.shearmod
+#         self.lame_lambda = (self.youngmod * self.poisson_nu)/((1+self.poisson_nu)*(1-2*self.poisson_nu))
+#         self.t_relax = dyn_viscos/self.shearmod
 
         
 class Cauldron(Ice):
@@ -52,12 +63,15 @@ class Cauldron(Ice):
     Inherits material properties from class Ice.
     """
     def __init__(self, name='Cauldron', thickness=300, radius=1500, initial_surface=lambda x: 1000):
-        Ice.__init__(self) #inherit quantities from Ice
+        super(Cauldron,self).__init__() #inherit quantities from Ice
         self.name = name
         self.thickness = thickness
         self.radius = radius
         self.initial_surface = initial_surface
-        self.bending_mod = self.youngmod * self.thickness **3 / (12*(1-self.poisson_nu**2))
+        
+    @property
+    def bending_mod(self):
+        return self.youngmod * self.thickness **3 / (12*(1-self.poisson_nu**2))
     
     def elastic_beam_deform(self, x, loading=None):
         """Calculate displacement due to elastic deformation of an ice beam.  Returns deformation as a function of x, with x=0 at center of cauldron.
